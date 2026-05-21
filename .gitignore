@@ -6,6 +6,7 @@ dist/
 .DS_Store
 coverage/
 outputs/
+.vscode/
 
 # LangGraph API
 .langgraph_api

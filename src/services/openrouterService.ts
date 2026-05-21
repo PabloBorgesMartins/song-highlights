@@ -35,9 +35,18 @@ export class OpenRouterService {
     });
   }
 
+  async teste() {
+    try {
+      const result = await this.llmClient.invoke('Olá -=-=-=-=-==-==-== ');
+      console.log(result.content);
+    } catch (error) {
+      console.error(error, 'tchau -=-=-=-=-==-==-== ');
+    }
+  }
+
   async generateStructured<T>(
-    userPrompt: string,
     systemPrompt: string,
+    userPrompt: string,
     schema: z.ZodSchema<T>,
   ) {
     try {

@@ -18,17 +18,19 @@ export type ModelConfig = {
   };
 };
 
-console.assert(process.env.OPENROUTER_API_KEY, 'OPENROUTER_API_KEY is not set in environment variables');
+console.assert(process.env.OPENAI_API_KEY, 'OPENAI_API_KEY is not set in environment variables');
 
 export const config: ModelConfig = {
-  apiKey: process.env.OPENROUTER_API_KEY!,
-  httpReferer: '',
-  xTitle: 'IA Devs - Prompt Chaining Article Generator',
+  apiKey: process.env.OPENAI_API_KEY!,
+  httpReferer: process.env.OPENROUTER_HTTP_REFERER!,
+  xTitle: process.env.OPENROUTER_X_TITLE!,
   models: [
     // 'qwen/qwen3-coder-next',
     // https://openrouter.ai/models?fmt=cards&max_price=0&order=throughput-high-to-low&supported_parameters=structured_outputs%2Cresponse_format
-    'upstage/solar-pro-3:free',
+    // 'upstage/solar-pro-3:free',
     // 'gpt-oss-120b:free',
+    // 'gpt-oss-120b:free'
+    'openrouter/owl-alpha',
   ],
   provider: {
     sort: {
