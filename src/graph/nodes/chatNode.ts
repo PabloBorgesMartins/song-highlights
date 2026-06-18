@@ -2,12 +2,13 @@ import type { Runtime } from '@langchain/langgraph';
 import { OpenRouterService } from '../../services/openrouterService.ts';
 import type { GraphState } from '../graph.ts';
 import { ChatResponseSchema, getSystemPrompt, getUserPromptTemplate } from '../../prompts/v1/chatResponse.ts';
-import { HumanMessage } from 'langchain';
+import { AIMessage, HumanMessage } from 'langchain';
+import { PreferencesService } from '../../services/preferencesService.ts';
 
-export function createChatNode(llmClient: OpenRouterService) {
+export function createChatNode(llmClient: OpenRouterService, preferencesService: PreferencesService) {
   return async (state: GraphState, runtime?: Runtime): Promise<Partial<GraphState>> => {
-
-    const userContext = ''
+    const userId = String(runtime?.context?.userId || state.userId || 'unknown');
+    const userContext = state.userContext ?? await preferencesService.getBasicInfo(userId)
     const systemPrompt = getSystemPrompt(userContext)
 
     const conversationHistory = state.messages.map((msg) => `${HumanMessage.isInstance(msg) ? 'User' : 'AI'}: ${msg.content}`).join('\n')
@@ -17,10 +18,19 @@ export function createChatNode(llmClient: OpenRouterService) {
 
     const result = await llmClient.generateStructured(systemPrompt, userPrompt, ChatResponseSchema)
 
-    1;
+    if (!result.success || !result.data) {
+      console.error('Falha ao gerar resposta:', result.error);
+      return {
+        messages: [new AIMessage('Desculpe, ocorreu um erro. Pode tentar novamente?')],
+      }
+    }
+
+    const response = result.data
 
     return {
-      ...state,
+      messages: [new AIMessage(response.message)],
+      extractedPreferences: response.shouldSavePreferences ? response.preferences : undefined,
+      needsSummarization: false
     };
   };
 }

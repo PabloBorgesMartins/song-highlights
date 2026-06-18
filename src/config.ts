@@ -22,15 +22,14 @@ console.assert(process.env.OPENAI_API_KEY, 'OPENAI_API_KEY is not set in environ
 
 export const config: ModelConfig = {
   apiKey: process.env.OPENAI_API_KEY!,
-  httpReferer: process.env.OPENROUTER_HTTP_REFERER!,
-  xTitle: process.env.OPENROUTER_X_TITLE!,
+  // httpReferer: process.env.OPENROUTER_HTTP_REFERER!,
+  // xTitle: process.env.OPENROUTER_X_TITLE!, 
+  httpReferer: 'http://localhost:3000',
+  xTitle: 'song-highlights',
   models: [
-    // 'qwen/qwen3-coder-next',
-    // https://openrouter.ai/models?fmt=cards&max_price=0&order=throughput-high-to-low&supported_parameters=structured_outputs%2Cresponse_format
-    // 'upstage/solar-pro-3:free',
-    // 'gpt-oss-120b:free',
-    // 'gpt-oss-120b:free'
-    'openrouter/owl-alpha',
+    // "nvidia/llama-nemotron-rerank-vl-1b-v2:free",
+    // "cohere/north-mini-code:free"
+    'nex-agi/nex-n2-pro:free'
   ],
   provider: {
     sort: {
